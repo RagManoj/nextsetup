@@ -2,7 +2,7 @@ import React from 'react'
 import type { AppProps } from "next/app";
 import {useEffect, useState} from 'react';
 import { ConfigProvider } from "antd";
-
+import './globals.css';
 import theme from "../theme/themeConfig";
 
 function SafeHydrate({
