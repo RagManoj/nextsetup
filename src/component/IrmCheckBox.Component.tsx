@@ -1,70 +1,64 @@
-import { Checkbox, ConfigProvider } from "antd";
-import React from "react";
+import { Checkbox, ConfigProvider, Space } from "antd";
+import React, { useState, useEffect } from "react";
 import { generate } from "@ant-design/colors";
+import { getColor, getFontSize, libraryDirection, librarySizes, libraryVariant } from "./library.model";
 
-export interface CheckboxProps {
+export interface CheckboxData {
+  id: string;
   label: string;
-  checked: boolean;
-  onChange(checked: boolean): void;
-  variant?: "primary"  | "secondary"  | "danger" | "warning" | "success";
-  size?: "default" | "small" | "medium" | "large";
+  checked?: boolean;
   disabled?: boolean;
 }
 
-const CustomCheckbox = (props: CheckboxProps) => {
-  let checkboxColor: string;
-  let checkboxSize: number;
+export interface CustomCheckboxProps extends libraryVariant,librarySizes,libraryDirection {
+  checkboxes: CheckboxData[];
+  onChange(updatedCheckboxes: CheckboxData[]): void;
+}
 
-  const getCheckboxColor = (variant?:CheckboxProps['variant']) => {
-    switch (variant) {
-      case "danger":
-        return generate("#FF5733")[5];
-      case "secondary":
-        return generate("lightblue")[5];
-      case "warning":
-        return generate("orange")[5];
-      case "success":
-        return generate("green")[5];
-      case "primary":
-        return generate("blue")[5];
-      default:
-        return generate("#000000")[5];
-    }
+const CustomCheckbox = (props: CustomCheckboxProps) => {
+  const [checkboxes, setCheckboxes] = useState(props.checkboxes);
+
+  useEffect(() => {
+    setCheckboxes(props.checkboxes);
+  }, [props.checkboxes]);
+
+  const handleCheckboxChange = (id: string, checked: boolean) => {
+    const updatedCheckboxes = checkboxes.map((checkbox) =>
+      checkbox.id === id ? { ...checkbox, checked } : checkbox
+    );
+    setCheckboxes(updatedCheckboxes);
+    props.onChange(updatedCheckboxes);
   };
-  const getSize = (size: CheckboxProps["size"] = "default"): number => {
-    let sizes = {
-      default: 20,
-      small: 10,
-      medium: 25,
-      large: 25,
-    };
-    return sizes[size];
-  };
-  checkboxColor = getCheckboxColor(props.variant);
 
   return (
     <ConfigProvider
       theme={{
         components: {
           Checkbox: {
-            colorPrimaryBgHover: checkboxColor,
-            colorPrimaryHover: checkboxColor,
-            controlInteractiveSize: getSize(props.size),
-            colorPrimary: checkboxColor,
-            fontSize: getSize(props.size),
-            // colorWhite:checkboxColor,
-            // lineWidth:2
+            colorPrimaryBgHover: getColor(props.variant),
+            colorPrimaryHover: getColor(props.variant),
+            controlInteractiveSize: getFontSize(props.size),
+            colorPrimary: getColor(props.variant),
+            fontSize: getFontSize(props.size),
+            borderRadiusSM: 2,
           },
         },
       }}
     >
-      <Checkbox
-        checked={props.checked}
-        onChange={(e) => props.onChange(e.target.checked)}
-        disabled={props.disabled}
-      >
-        {props.label}
-      </Checkbox>
+      <Space direction={props.direction?props.direction:'horizontal'}>
+        {checkboxes.map((checkbox) => (
+          <Checkbox
+            key={checkbox.id}
+            checked={checkbox.checked}
+            onChange={(e) =>
+              handleCheckboxChange(checkbox.id, e.target.checked)
+            }
+            disabled={checkbox.disabled}
+          >
+            {checkbox.label}
+          </Checkbox>
+        ))}
+      </Space>
     </ConfigProvider>
   );
 };

@@ -5,14 +5,48 @@ import store from "@/redux/store";
 import { ConfigProvider } from "antd";
 import IrmButton from "@/component/IrmButton.Component";
 import { IconArrowLeft } from "@tabler/icons-react";
-import IrmCheckBox from "@/component/IrmCheckBox.Component";
-import { useState } from "react";
+import IrmCheckBox, { CheckboxData } from "@/component/IrmCheckBox.Component";
+import { useEffect, useState } from "react";
+import IrmRadio, { RadioProps } from "@/component/IrmRadio.Component";
+import IrmToggle from "@/component/IrmToggle.Component";
 
 export default function Home() {
-  const [isChecked, setIsChecked] = useState(true);
+  const initialCheckboxes: CheckboxData[] = [
+    { id: "checkbox1", label: "Checkbox 1", checked: false},
+    {
+      id: "checkbox2",
+      label: "Checkbox 2",
+      checked: true,
+    },
+    {
+      id: "checkbox3",
+      label: "Checkbox 3",
+      checked: false,
+    },
+  ];
+
+  const radioButtons: RadioProps[] = [
+    { id: "1", label: "Option A", },
+    { id: "2", label: "Option B", },
+    { id: "3", label: "Option C", disabled: true },
+  ];
+
+  const [checkboxes, setCheckboxes] = useState(initialCheckboxes);
+  const [radiobuttons,setRadioButtons] = useState(radioButtons)
+  
+  const handleCheckboxesChange = (updatedCheckboxes: CheckboxData[]) => {
+    setCheckboxes(updatedCheckboxes);
+  };
+  const handleRadioButtons = (e: any) => {
+    console.log(e);
+  };
   const handleClick = () => {
     console.log("clicked");
   };
+
+  const toggle = (t:any) => {
+    console.log(t)
+  }
 
   return (
     <Provider store={store}>
@@ -80,27 +114,47 @@ export default function Home() {
                   iconPosition="start"
                 />
                 <div>
+                  <IrmCheckBox
+                    checkboxes={checkboxes}
+                    onChange={handleCheckboxesChange}
+                    variant="danger"
+                  />
+                </div>
+                <div>
                 <IrmCheckBox
-                  label="Check me"
-                  checked={isChecked}
-                  onChange={(checked) => setIsChecked(checked)}
-                  variant="primary"
-                  disabled={false}
+                    checkboxes={checkboxes}
+                    onChange={handleCheckboxesChange}
+                    variant="primary"
+                    size="medium"
+                    direction='vertical'
+                  />
+                </div>
+               <div>
+                <div>
+                <IrmToggle  label="Hello" variant="danger" size="large" lablePosition='right'  onChange={toggle} />
+                </div>
+                <div>
+                <IrmToggle label="World" variant="primary" size="default"  lablePosition='left' onChange={toggle} />
+
+                </div>
+
+               </div>
+               <div>
+               <IrmRadio
+                  onChange={handleRadioButtons}
+                  direction="vertical"
+                  radioButtons={radiobuttons}
+                  variant='danger'
                 />
-                </div>
+               </div>
+               <div>
+               <IrmRadio
+                  onChange={handleRadioButtons}
+                  direction="horizontal"
+                  radioButtons={radiobuttons}
+                />
+               </div>
                 
-                <div className="flex">
-                  <span className="box-decoration-slice bg-gradient-to-r from-indigo-600 to-pink-500 text-white px-2 ...">
-                    Hello
-                    <br />
-                    World
-                  </span>
-                  <span className="box-decoration-clone bg-gradient-to-r from-indigo-600 to-pink-500 text-white px-2 ...">
-                    Hello
-                    <br />
-                    World
-                  </span>
-                </div>
               </div>
             }
           />
