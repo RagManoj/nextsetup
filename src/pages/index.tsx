@@ -9,10 +9,11 @@ import IrmCheckBox, { CheckboxData } from "@/component/IrmCheckBox.Component";
 import { useEffect, useState } from "react";
 import IrmRadio, { RadioProps } from "@/component/IrmRadio.Component";
 import IrmToggle from "@/component/IrmToggle.Component";
+import IrmTextEditor from "@/component/IrmTextEditor.Component";
 
 export default function Home() {
   const initialCheckboxes: CheckboxData[] = [
-    { id: "checkbox1", label: "Checkbox 1", checked: false},
+    { id: "checkbox1", label: "Checkbox 1", checked: false },
     {
       id: "checkbox2",
       label: "Checkbox 2",
@@ -26,14 +27,27 @@ export default function Home() {
   ];
 
   const radioButtons: RadioProps[] = [
-    { id: "1", label: "Option A", },
-    { id: "2", label: "Option B", },
+    { id: "1", label: "Option A" },
+    { id: "2", label: "Option B" },
     { id: "3", label: "Option C", disabled: true },
   ];
 
   const [checkboxes, setCheckboxes] = useState(initialCheckboxes);
-  const [radiobuttons,setRadioButtons] = useState(radioButtons)
-  
+  const [radiobuttons, setRadioButtons] = useState(radioButtons);
+  const [editorContent, setEditorContent] = useState("");
+
+  const handleSave = (content: string) => {
+    // Handle saving the content, e.g., send it to a server or update state
+    setEditorContent(content);
+    console.log("Saved content:", content);
+  };
+
+  const handleCancel = () => {
+    // Handle cancel action, e.g., reset the editor content
+    setEditorContent("");
+    console.log("Cancelled editing");
+  };
+
   const handleCheckboxesChange = (updatedCheckboxes: CheckboxData[]) => {
     setCheckboxes(updatedCheckboxes);
   };
@@ -44,9 +58,9 @@ export default function Home() {
     console.log("clicked");
   };
 
-  const toggle = (t:any) => {
-    console.log(t)
-  }
+  const toggle = (t: any) => {
+    console.log(t);
+  };
 
   return (
     <Provider store={store}>
@@ -121,40 +135,67 @@ export default function Home() {
                   />
                 </div>
                 <div>
-                <IrmCheckBox
+                  <IrmCheckBox
                     checkboxes={checkboxes}
                     onChange={handleCheckboxesChange}
                     variant="primary"
                     size="medium"
-                    direction='vertical'
+                    direction="vertical"
                   />
                 </div>
-               <div>
                 <div>
-                <IrmToggle  label="Hello" variant="danger" size="large" lablePosition='right'  onChange={toggle} />
+                  <div>
+                    <IrmToggle
+                      label="Hello"
+                      variant="danger"
+                      size="large"
+                      lablePosition="right"
+                      onChange={toggle}
+                    />
+                  </div>
+                  <div>
+                    <IrmToggle
+                      label="World"
+                      variant="primary"
+                      size="default"
+                      lablePosition="left"
+                      onChange={toggle}
+                    />
+                  </div>
                 </div>
                 <div>
-                <IrmToggle label="World" variant="primary" size="default"  lablePosition='left' onChange={toggle} />
-
+                  <IrmRadio
+                    onChange={handleRadioButtons}
+                    direction="vertical"
+                    radioButtons={radiobuttons}
+                    variant="danger"
+                  />
                 </div>
-
-               </div>
-               <div>
-               <IrmRadio
-                  onChange={handleRadioButtons}
-                  direction="vertical"
-                  radioButtons={radiobuttons}
-                  variant='danger'
-                />
-               </div>
-               <div>
-               <IrmRadio
-                  onChange={handleRadioButtons}
-                  direction="horizontal"
-                  radioButtons={radiobuttons}
-                />
-               </div>
-                
+                <div>
+                  <IrmRadio
+                    onChange={handleRadioButtons}
+                    direction="horizontal"
+                    radioButtons={radiobuttons}
+                  />
+                </div>
+                <div>
+                  <IrmTextEditor
+                    placeholder="Enter text here..."
+                    height="400px"
+                    theme="light" 
+                    onSave={handleSave}
+                    onCancel={handleCancel}
+                  />
+                </div>
+                <div>
+                  <IrmTextEditor
+                    placeholder="Enter text here..."
+                    height="400px"
+                    theme="dark"
+                    onSave={handleSave}
+                    onCancel={handleCancel}
+                  />
+                </div>
               </div>
             }
           />
