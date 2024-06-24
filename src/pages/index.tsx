@@ -1,8 +1,8 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { Store } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import store from "@/redux/store";
-import { ConfigProvider } from "antd";
+import { ConfigProvider, Divider, MenuProps } from "antd";
 import IrmButton from "@/component/IrmButton.Component";
 import { IconArrowLeft } from "@tabler/icons-react";
 import IrmCheckBox, { CheckboxData } from "@/component/IrmCheckBox.Component";
@@ -10,6 +10,15 @@ import { useEffect, useState } from "react";
 import IrmRadio, { RadioProps } from "@/component/IrmRadio.Component";
 import IrmToggle from "@/component/IrmToggle.Component";
 import IrmTextEditor from "@/component/IrmTextEditor.Component";
+import {
+  DesktopOutlined,
+  FileOutlined,
+  PieChartOutlined,
+  TeamOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+import IrmNavigation from "@/component/IrmNavigation.Component";
+
 
 export default function Home() {
   const initialCheckboxes: CheckboxData[] = [
@@ -62,145 +71,31 @@ export default function Home() {
     console.log(t);
   };
 
+
+  const menuData = [
+    { label: "Option 1", key: "1", path: '/option1', icon:'/Templete.svg' },
+    { label: "Option 2", key: "2", path: '/option2', icon: <DesktopOutlined /> },
+    { label: "User", key: "sub1", path: '/', icon: <UserOutlined />, children: [
+      { label: "Tom", key: "3",icon: <UserOutlined />, path: '/user/tom' },
+      { label: "Bill", key: "4", path: '/user/bill' },
+      { label: "Alex", key: "5", path: '/user/alex', children: [
+        { label: "Sub-Alex 1", key: "10", path: '/user/alex/sub1' },
+        { label: "Sub-Alex 2", key: "11", path: '/user/alex/sub2' }
+      ]}
+    ]},
+    { label: "Team", key: "sub2", path: '/', icon: <TeamOutlined />, children: [
+      { label: "Team 1", key: "6", path: '/team1' ,icon:'/Templete.svg' },
+      { label: "Team 2", key: "8", path: '/team2' }
+    ]},
+    { label: "Files", key: "9", path: '/files', icon: <FileOutlined /> },
+    { label: "hemanth", key: "12", path: '/option2', icon:'/Templete.svg' },
+
+  ];
+
   return (
     <Provider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <div>
-                <IrmButton
-                  type="default"
-                  children="Hello"
-                  click={handleClick}
-                  size="large"
-                  icon={<IconArrowLeft />}
-                  iconPosition="end"
-                />
-                <h1></h1>
-                <IrmButton
-                  type="primary"
-                  children="Hello"
-                  click={handleClick}
-                  size="middle"
-                  icon={<IconArrowLeft />}
-                  iconPosition="start"
-                />
-                <h1></h1>
-                <IrmButton
-                  type="default"
-                  variant="danger"
-                  children="Hello"
-                  click={handleClick}
-                  size="small"
-                  icon={<IconArrowLeft />}
-                  iconPosition="end"
-                />
-                <h1></h1>
-                <IrmButton
-                  type="default"
-                  variant="secondary"
-                  children="Hello"
-                  click={handleClick}
-                  size="large"
-                  icon={<IconArrowLeft />}
-                  iconPosition="start"
-                />
-                <h1></h1>
-                <IrmButton
-                  type="default"
-                  variant="success"
-                  children="Hello"
-                  click={handleClick}
-                  size="middle"
-                  icon={<IconArrowLeft />}
-                  iconPosition="end"
-                />
-                <h1></h1>
-                <IrmButton
-                  type="default"
-                  variant="warning"
-                  children="Hello"
-                  click={handleClick}
-                  size="small"
-                  icon={<IconArrowLeft />}
-                  iconPosition="start"
-                />
-                <div>
-                  <IrmCheckBox
-                    checkboxes={checkboxes}
-                    onChange={handleCheckboxesChange}
-                    variant="danger"
-                  />
-                </div>
-                <div>
-                  <IrmCheckBox
-                    checkboxes={checkboxes}
-                    onChange={handleCheckboxesChange}
-                    variant="primary"
-                    size="medium"
-                    direction="vertical"
-                  />
-                </div>
-                <div>
-                  <div>
-                    <IrmToggle
-                      label="Hello"
-                      variant="danger"
-                      size="large"
-                      lablePosition="right"
-                      onChange={toggle}
-                    />
-                  </div>
-                  <div>
-                    <IrmToggle
-                      label="World"
-                      variant="primary"
-                      size="default"
-                      lablePosition="left"
-                      onChange={toggle}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <IrmRadio
-                    onChange={handleRadioButtons}
-                    direction="vertical"
-                    radioButtons={radiobuttons}
-                    variant="danger"
-                  />
-                </div>
-                <div>
-                  <IrmRadio
-                    onChange={handleRadioButtons}
-                    direction="horizontal"
-                    radioButtons={radiobuttons}
-                  />
-                </div>
-                <div>
-                  <IrmTextEditor
-                    placeholder="Enter text here..."
-                    height="400px"
-                    theme="light" 
-                    onSave={handleSave}
-                    onCancel={handleCancel}
-                  />
-                </div>
-                <div>
-                  <IrmTextEditor
-                    placeholder="Enter text here..."
-                    height="400px"
-                    theme="dark"
-                    onSave={handleSave}
-                    onCancel={handleCancel}
-                  />
-                </div>
-              </div>
-            }
-          />
-        </Routes>
-      </BrowserRouter>
+
+      <IrmNavigation theme="light" items={menuData}/>
     </Provider>
   );
 }

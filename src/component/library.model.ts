@@ -10,6 +10,9 @@ interface libraryDirection {
     direction?: "vertical" | "horizontal";
 
 }
+interface LayoutTheme{
+    theme : 'light' | 'dark'
+}
 const getColor = (variant: libraryVariant['variant'] = 'primary' ) => {
     switch (variant) {
         case "danger":
@@ -38,5 +41,5 @@ const getFontSize = (size: librarySizes['size'] = "default"): number => {
   };
 // Export the classes and the function
 export { getColor, getFontSize };
-export type { libraryVariant ,librarySizes,libraryDirection};
+export type { libraryVariant ,librarySizes,libraryDirection,LayoutTheme};
 

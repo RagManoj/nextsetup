@@ -1,12 +1,12 @@
 import dynamic from "next/dynamic";
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useEffect } from "react";
 
 interface IrmTextEditorProps {
   placeholder?: string;
   height?: string;
   theme?: "dark" | "light" | undefined;
-  onSave?: (content: string) => void;
-  onCancel?: () => void;
+  value: string;
+  onChange?: (content: string) => void;
 }
 
 const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
@@ -15,11 +15,10 @@ const IrmTextEditor: React.FC<IrmTextEditorProps> = ({
   placeholder,
   height = "300px",
   theme,
-  onSave,
-  onCancel,
+  value,
+  onChange,
 }) => {
-  const editor = useRef(null);
-  const [content, setContent] = useState("");
+  const editor = useRef<any>(null);
 
   const config = useMemo(
     () => ({
@@ -31,7 +30,6 @@ const IrmTextEditor: React.FC<IrmTextEditorProps> = ({
       showPoweredBy: false,
       height: height || "400px",
       theme: theme || "light",
-    //   width: '120%',
       uploader: {
         insertImageAsBase64URI: true,
       },
@@ -54,31 +52,21 @@ const IrmTextEditor: React.FC<IrmTextEditorProps> = ({
     [placeholder, height]
   );
 
-  const handleSave = () => {
-    if (onSave) {
-      onSave(content);
+  useEffect(() => {
+    if (editor.current && value !== undefined) {
+      editor.current.value = value;
     }
-  };
-
-  const handleCancel = () => {
-    if (onCancel) {
-      onCancel();
-    }
-  };
+  }, [value]);
 
   return (
     <div style={{ padding: '0 50px' }}>
       <JoditEditor
         ref={editor}
-        value={content}
+        value={value}
         config={config}
-        onBlur={(newContent: string) => setContent(newContent)}
-        onChange={(newContent: string) => setContent(newContent)}
+        onBlur={(newContent: string) => onChange && onChange(newContent)}
+        onChange={(newContent: string) => onChange && onChange(newContent)}
       />
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '30px', marginTop: '10px' }}>
-        <button onClick={handleSave}>Save</button>
-        <button onClick={handleCancel}>Cancel</button>
-      </div>
     </div>
   );
 };
